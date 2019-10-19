@@ -33,17 +33,50 @@ def matrix_vs_model_mean_absolute_error( m0, model ):
     w =  model.layers[0].get_weights()[0]
     for row in range(w.shape[1]):
         for col in range(w.shape[0]):
-            dw = abs(w[col][row] - m0[row][col])
+            dw = abs(w[col,row] - m0[row,col])
             total += dw
             
     count = w.shape[0]*w.shape[1]
     mae = total/count
     return mae
 
-def fit_and_evaluate( m0, data ):
+def flatten_series_data( data ):
+    return  data.reshape( (data.shape[0]*data.shape[1],data.shape[2]) )
+
+def fit_and_evaluate_series( m0, data ):
+    series_count = data[0].shape[0]
+    series_size = data[0].shape[1]
+    size = data[0].shape[2]
+    
+    if data[1].shape[0] != series_count:
+        raise Exception( "data series counts don't match!" )
+    if data[1].shape[1] != series_size:
+        raise Exception( "data series sizes don't match!" )
+    if data[1].shape[2] != size:
+        raise Exception( "data point sizes don't match!" )
+    if size != m0.shape[0]:
+        raise Exception( "data point sizes don't match matrix size!" )
+
+    train_count = int( 0.80*series_count )
+    train_data = flatten_series_data( data[0][:train_count] ), flatten_series_data( data[1][:train_count] ), 
+    test_data = flatten_series_data( data[0][train_count:] ), flatten_series_data( data[1][train_count:] ), 
+
+    model = create_square_matrix( m0.shape[0] )
+    
+    fit_model( model, train_data[0], train_data[1] )
+    results = evaluate_model( model, test_data[0], test_data[1] )
+    matrix_error = matrix_vs_model_mean_absolute_error( m0, model )
+    return results + [ matrix_error ]
+
+def fit_and_evaluate_non_series( m0, data ):
     count = data[0].shape[0]
+    size = data[0].shape[1]
     if data[1].shape[0] != count:
         raise Exception( "data sizes don't match!" )
+    if data[1].shape[1] != size:
+        raise Exception( "data point sizes don't match!" )
+    if size != m0.shape[0]:
+        raise Exception( "data point sizes don't match matrix size!" )
 
     train_count = int( 0.80*count )
     train_data = data[0][:train_count], data[1][:train_count]
@@ -56,9 +89,22 @@ def fit_and_evaluate( m0, data ):
     matrix_error = matrix_vs_model_mean_absolute_error( m0, model )
     return results + [ matrix_error ]
 
-if __name__ == "__main__":
+def fit_and_evaluate( m0, data ):
+    if len(data) != 2:
+        results = None
+        raise Exception( "Unknown data format, should be 2-tuple" )
+    elif len(data[0].shape) == 2:
+        results = fit_and_evaluate_non_series( m0, data )
+    elif len(data[0].shape) == 3:
+        results = fit_and_evaluate_series( m0, data )
+    else:
+        results = None
+        raise Exception( "Unknown data format, should have 2 or 3 dimensions." )
+    return results
 
+def main():    
     count = 10000
+    count = 10
     m0, data = generate_data.create_demo( generate_data.DEMO_2_x_2_a, count )
     results = fit_and_evaluate( m0, data )
     print( results )
@@ -108,3 +154,19 @@ if __name__ == "__main__":
     # print( a )
     # print( model.predict( a ) )
     # print( "----------------------------------------" )
+    return
+
+def main2():
+    series_count = 10
+    series_size = 20
+    
+    m0, data = generate_data.create_demo_series( generate_data.DEMO_2_x_2_a, series_count, series_size )
+    #results = fit_and_evaluate_series( m0, data )
+    results = fit_and_evaluate( m0, data )
+    print( results )
+    sys.exit(0)
+    return
+
+if __name__ == "__main__":
+    main2()
+

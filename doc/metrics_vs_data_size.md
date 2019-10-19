@@ -30,10 +30,32 @@ The results are displayed as a scatter plot in FitQualityVsDataSize.pdf.
 It appears that close to 10,000 data samples are needed for the
 learned matrix to stabilize with respect to the original matrix.
 
+Other hand-built original matrices. 
+-----------------------------------
+
+Built a second hand selected 2x2 matrix.  Saw similar
+learning profile as the original hand built one.
+
+
+Random original matrices. 
+-------------------------
+
+Generated random matrices, of size 2x2, and see similar loss and
+error profiles to the custom hand built 2x2 matrices.  Only using
+coefficients in the range $-1.0 \le m_{ij} \le 1.0$.
+
+
+Added data series/sequences for training and testing 
+-----------------------------------------------------
+
+Data sequences longer than 1.  (x0,y0)...(xn,yn) instead of a bunch of (x0,y0),(x1,y1) 
+pairs were added.  The fit appeared to be the same for the same total number 
+of data points. This seems to indicate that a sequence of data points is not
+necessary for training.  The data points can be spread out.
+
 Future Work
 -----------
 
-- Other hand-built original matrices. 
 - Larger original matrices.
 - Study number of epochs.
 - Other loss functions?
@@ -41,7 +63,3 @@ Future Work
   the learned matrix matches the original?
 - Regularization techniques for sparse matrices.
 - Other?
-
-
-
-
