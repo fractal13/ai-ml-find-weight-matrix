@@ -36,6 +36,10 @@ Other hand-built original matrices.
 Built a second hand selected 2x2 matrix.  Saw similar
 learning profile as the original hand built one.
 
+See FitQualityVsDataSizeDEMO_2_x_2_a.0.5.0.25.-0.1.-0.3.pdf vs. 
+FitQualityVsDataSizeDEMO_2_x_2_b.0.89.-0.21.-0.43.0.35.pdf to
+compare the two hand built matrices.
+
 
 Random original matrices. 
 -------------------------
@@ -43,6 +47,10 @@ Random original matrices.
 Generated random matrices, of size 2x2, and see similar loss and
 error profiles to the custom hand built 2x2 matrices.  Only using
 coefficients in the range $-1.0 \le m_{ij} \le 1.0$.
+
+See FitQualityVsDataSizeDEMO_2_x_2_a.0.5.0.25.-0.1.-0.3.pdf vs
+FitQualityVsDataSizeDEMO_2_x_2_random.-0.27085102.0.66129816.-0.5462765.-0.10248758.pdf
+for to compare a random matrix vs a hand built one.
 
 
 Added data series/sequences for training and testing 
@@ -52,6 +60,11 @@ Data sequences longer than 1.  (x0,y0)...(xn,yn) instead of a bunch of (x0,y0),(
 pairs were added.  The fit appeared to be the same for the same total number 
 of data points. This seems to indicate that a sequence of data points is not
 necessary for training.  The data points can be spread out.
+
+See FitQualityVsDataSizeDEMO_2_x_2_random.-0.27085102.0.66129816.-0.5462765.-0.10248758.pdf
+vs 
+FitQualityVsDataSizeSeriesDEMO_2_x_2_random.0.3405992.0.8356215.0.54774016.0.91837907.pdf
+to see the difference, or lack thereof, between non-series and series data.
 
 Future Work
 -----------
