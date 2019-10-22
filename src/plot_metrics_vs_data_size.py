@@ -35,11 +35,15 @@ def plot( plot_data, names, pdfname="" ):
         plt.savefig( pdfname )
     else:
         plt.show( )
+
+    plt.clf()
     return
 
 def make_a_demo_plot( which ):
-    counts = [ 10, 20, 40, 100, 200, 400, 1000, 2000, 4000, 10000 ]
-    repeats = 10
+    #counts = [ 10, 20, 40, 100, 200, 400, 1000, 2000, 4000, 10000 ]
+    #repeats = 10
+    counts = [  10, 20, 40, 100, 200, 400, 1000, 2000, 4000, 10000, 20000, 40000, 100000, 200000, 400000, 1000000 ]
+    repeats = 1
     #counts = [ 10, 20, 40, 100, 200, 400 ]
     #counts = [ 10, 20, 40 ]
     plot_data = []
@@ -59,9 +63,11 @@ def make_a_demo_plot( which ):
     return
 
 def make_a_series_demo_plot( which ):
-    counts = [  10, 20, 40, 100, 200, 400, 1000, 2000, 4000, 10000 ]
+    #counts = [  10, 20, 40, 100, 200, 400, 1000, 2000, 4000, 10000 ]
+    counts = [  10, 20, 40, 100, 200, 400, 1000, 2000, 4000, 10000, 20000, 40000, 100000, 200000, 400000, 1000000 ]
     series_size = 100
-    repeats = 10
+    repeats = 1
+    #repeats = 10
     #counts = [ 10, 20, 40, 100, 200, 400 ]
     #counts = [ 10, 20, 40 ]
     plot_data = []
@@ -96,5 +102,6 @@ def main2():
     return
 
 if __name__ == "__main__":
-    main2()
+    main()
+
     
