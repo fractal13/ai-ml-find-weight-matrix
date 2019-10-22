@@ -19,8 +19,13 @@ def create_square_matrix( size ):
                    metrics=[ "mae" ] )
     return model
 
-def fit_model( model, input_data, output_data ):
-    model.fit( x=input_data, y=output_data, epochs=10, verbose=0 )
+def fit_model( model, input_data, output_data, params ):
+    if 'epochs' in params:
+        epochs = params['epochs']
+    else:
+        epochs = 10
+        
+    model.fit( x=input_data, y=output_data, epochs=epochs, verbose=0 )
     return
 
 def evaluate_model( model, input_data, output_data ):
@@ -43,7 +48,7 @@ def matrix_vs_model_mean_absolute_error( m0, model ):
 def flatten_series_data( data ):
     return  data.reshape( (data.shape[0]*data.shape[1],data.shape[2]) )
 
-def fit_and_evaluate_series( m0, data ):
+def fit_and_evaluate_series( m0, data, params ):
     series_count = data[0].shape[0]
     series_size = data[0].shape[1]
     size = data[0].shape[2]
@@ -63,12 +68,12 @@ def fit_and_evaluate_series( m0, data ):
 
     model = create_square_matrix( m0.shape[0] )
     
-    fit_model( model, train_data[0], train_data[1] )
+    fit_model( model, train_data[0], train_data[1], params )
     results = evaluate_model( model, test_data[0], test_data[1] )
     matrix_error = matrix_vs_model_mean_absolute_error( m0, model )
     return results + [ matrix_error ]
 
-def fit_and_evaluate_non_series( m0, data ):
+def fit_and_evaluate_non_series( m0, data, params ):
     count = data[0].shape[0]
     size = data[0].shape[1]
     if data[1].shape[0] != count:
@@ -84,19 +89,19 @@ def fit_and_evaluate_non_series( m0, data ):
 
     model = create_square_matrix( m0.shape[0] )
     
-    fit_model( model, train_data[0], train_data[1] )
+    fit_model( model, train_data[0], train_data[1], params )
     results = evaluate_model( model, test_data[0], test_data[1] )
     matrix_error = matrix_vs_model_mean_absolute_error( m0, model )
     return results + [ matrix_error ]
 
-def fit_and_evaluate( m0, data ):
+def fit_and_evaluate( m0, data, params ):
     if len(data) != 2:
         results = None
         raise Exception( "Unknown data format, should be 2-tuple" )
     elif len(data[0].shape) == 2:
-        results = fit_and_evaluate_non_series( m0, data )
+        results = fit_and_evaluate_non_series( m0, data, params )
     elif len(data[0].shape) == 3:
-        results = fit_and_evaluate_series( m0, data )
+        results = fit_and_evaluate_series( m0, data, params )
     else:
         results = None
         raise Exception( "Unknown data format, should have 2 or 3 dimensions." )
@@ -106,6 +111,7 @@ def main():
     count = 10000
     count = 10
     m0, data = generate_data.create_demo( generate_data.DEMO_2_x_2_a, count )
+    params = { 'epochs': 10 }
     results = fit_and_evaluate( m0, data )
     print( results )
     sys.exit(0)
@@ -120,8 +126,8 @@ def main():
     #     print( layer.get_weights() )
     # print( model.inputs )
     # print( model.outputs )
-    
-    # fit_model( model, train_data[0], train_data[1] )
+    # params = { 'epochs': 10 }
+    # fit_model( model, train_data[0], train_data[1], params )
 
     # print( "----------------------------------------" )
     # print( model )
@@ -161,6 +167,7 @@ def main2():
     series_size = 20
     
     m0, data = generate_data.create_demo_series( generate_data.DEMO_2_x_2_a, series_count, series_size )
+    params = { 'epochs': 10 }
     #results = fit_and_evaluate_series( m0, data )
     results = fit_and_evaluate( m0, data )
     print( results )
